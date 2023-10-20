@@ -2,8 +2,10 @@ package group.serverhotelbooking.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
-@Entity(name = "room")
+@Entity
+@Table(name = "room")
 public class RoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +26,12 @@ public class RoomEntity {
     @Column(name = "update_date")
     private Date updateDate;
 
+    @Column(name = "main_image")
+    private String mainImage;
+
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "id_size")
     private SizeEntity size;
@@ -31,6 +39,9 @@ public class RoomEntity {
     @ManyToOne
     @JoinColumn(name = "id_type")
     private TypeEntity type;
+
+    @OneToMany(mappedBy = "room")
+    private List<ImageEntity> images;
 
     public int getId() {
         return id;
@@ -94,5 +105,29 @@ public class RoomEntity {
 
     public void setType(TypeEntity type) {
         this.type = type;
+    }
+
+    public String getMainImage() {
+        return mainImage;
+    }
+
+    public void setMainImage(String mainImage) {
+        this.mainImage = mainImage;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<ImageEntity> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
     }
 }

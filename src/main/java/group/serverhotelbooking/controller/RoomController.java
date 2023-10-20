@@ -17,14 +17,26 @@ public class RoomController {
     @Autowired
     private RoomServiceImp roomServiceImp;
 
-    @GetMapping("/{pageNumber}")
-    private ResponseEntity<?> getProductsPagination(@PathVariable int pageNumber) {
+    @GetMapping("/page={pageNumber}")
+    private ResponseEntity<?> getRoomsPagination(@PathVariable int pageNumber) {
         Page<RoomResponse> rooms = roomServiceImp.getAllRoom(pageNumber, Constant.PAGE_SIZE);
 
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setStatusCode(200);
-        baseResponse.setMessage("Get Products Pagination");
+        baseResponse.setMessage("Get Rooms Pagination");
         baseResponse.setData(rooms);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/id={id}")
+    private ResponseEntity<?> getRoomById(@PathVariable int id) {
+        RoomResponse room = roomServiceImp.getRoomById(id);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setStatusCode(200);
+        baseResponse.setMessage("Get Room By Id");
+        baseResponse.setData(room);
 
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
