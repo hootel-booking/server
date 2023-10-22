@@ -43,6 +43,9 @@ public class RoomEntity {
     @OneToMany(mappedBy = "room")
     private List<ImageEntity> images;
 
+    @OneToMany(mappedBy = "room")
+    private List<CartEntity> cart;
+
     public int getId() {
         return id;
     }

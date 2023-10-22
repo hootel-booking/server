@@ -3,7 +3,8 @@ package group.serverhotelbooking.entity;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity(name = "type")
+@Entity
+@Table(name = "type")
 public class TypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
