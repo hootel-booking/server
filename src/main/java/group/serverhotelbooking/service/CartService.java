@@ -67,4 +67,14 @@ public class CartService implements CartServiceImp {
 
         return false;
     }
+
+    @Override
+    public boolean deleteCartById(int id) {
+        try {
+            cartRepository.deleteById(id);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 }

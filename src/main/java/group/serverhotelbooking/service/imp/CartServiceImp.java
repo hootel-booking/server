@@ -9,4 +9,6 @@ public interface CartServiceImp {
     List<CartResponse> getListCartByIdUser(int idUser);
 
     boolean insertRoom(CartRequest cartRequest);
+
+    boolean deleteCartById(int id);
 }
