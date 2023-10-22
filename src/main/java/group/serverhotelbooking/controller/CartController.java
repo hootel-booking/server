@@ -41,4 +41,16 @@ public class CartController {
 
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
+
+    @DeleteMapping("/id={id}")
+    private ResponseEntity<?> deleteCart(@PathVariable int id) {
+        boolean isSuccess = cartServiceImp.deleteCartById(id);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(isSuccess);
+        baseResponse.setMessage("Delete Cart By Id");
+        baseResponse.setStatusCode(200);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
 }
