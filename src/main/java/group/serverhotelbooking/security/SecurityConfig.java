@@ -43,6 +43,8 @@ public class SecurityConfig {
                 .antMatchers("/blog/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/modify/**").permitAll()
                 .antMatchers("/blog/**").permitAll()
+                .antMatchers("/carts/**").permitAll()
+                .antMatchers("/rooms/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
