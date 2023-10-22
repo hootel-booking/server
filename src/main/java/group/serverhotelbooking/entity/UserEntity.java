@@ -3,31 +3,32 @@ package group.serverhotelbooking.entity;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity (name = "user")
+@Entity
+@Table(name = "user")
 public class UserEntity {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column (name = "user_name")
-    private String username;
-
-    @Column (name = "email")
-    private String email;
-
-    @Column (name = "password")
-    private String password;
-
-    @Column (name = "phone")
-    private String phone;
-
-    @Column (name = "first_name")
+    @Column(name = "first_name")
     private String firstname;
 
-    @Column (name = "last_name")
-    private String lastname;
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column (name = "avatar")
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "avatar")
     private String avatar;
 
     @ManyToOne
@@ -41,6 +42,10 @@ public class UserEntity {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getFirstname() {
         return firstname;
     }
@@ -49,32 +54,20 @@ public class UserEntity {
         this.firstname = firstname;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -99,6 +92,14 @@ public class UserEntity {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public RoleEntity getRoleEntity() {
