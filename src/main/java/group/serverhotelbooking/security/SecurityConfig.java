@@ -1,5 +1,6 @@
 package group.serverhotelbooking.security;
 
+import group.serverhotelbooking.constant.Constant;
 import group.serverhotelbooking.filter.JwtFilter;
 import group.serverhotelbooking.provider.CustomAuthenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +40,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
-                .antMatchers("/login/**").permitAll()
-                .antMatchers("/blog/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/modify/**").permitAll()
-                .antMatchers("/blog/**").permitAll()
-                .antMatchers("/carts/**").permitAll()
-                .antMatchers("/rooms/**").permitAll()
-                .anyRequest().authenticated()
+                    .antMatchers("/login/**").permitAll()
+                    .antMatchers("/blog/**").hasRole(Constant.ROLE_ADMIN)
+                    .antMatchers(HttpMethod.POST,"/modify/**").permitAll()
+                    .antMatchers("/blog/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/users").hasRole(Constant.ROLE_ADMIN)
+                    .anyRequest().authenticated()
                 .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
