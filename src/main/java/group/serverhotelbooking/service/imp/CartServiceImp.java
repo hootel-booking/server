@@ -11,4 +11,6 @@ public interface CartServiceImp {
     boolean insertRoom(CartRequest cartRequest);
 
     boolean deleteCartById(int id);
+
+    int countRoomsInCartByIdUser(int idUser);
 }

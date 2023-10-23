@@ -44,7 +44,10 @@ public class RoomEntity {
     private List<ImageEntity> images;
 
     @OneToMany(mappedBy = "room")
-    private List<CartEntity> cart;
+    private List<CartEntity> carts;
+
+    @OneToMany(mappedBy = "room")
+    private List<ReservationEntity> reservations;
 
     public int getId() {
         return id;
@@ -132,5 +135,21 @@ public class RoomEntity {
 
     public void setImages(List<ImageEntity> images) {
         this.images = images;
+    }
+
+    public List<CartEntity> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<CartEntity> carts) {
+        this.carts = carts;
+    }
+
+    public List<ReservationEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<ReservationEntity> reservations) {
+        this.reservations = reservations;
     }
 }

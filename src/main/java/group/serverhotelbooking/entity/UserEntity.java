@@ -38,6 +38,9 @@ public class UserEntity {
     @OneToMany (mappedBy = "userEntity")
     private List<BlogEntity> blogEntityList;
 
+    @OneToMany(mappedBy = "user")
+    private List<ReservationEntity> reservations;
+
     public int getId() {
         return id;
     }

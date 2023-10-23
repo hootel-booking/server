@@ -51,7 +51,9 @@ public class CartService implements CartServiceImp {
         Optional<RoomEntity> roomEntity = roomRepository.findById(cartRequest.getIdRoom());
         Optional<UserEntity> userEntity = userRepository.findById(cartRequest.getIdUser());
 
-        if (roomEntity.isPresent() && userEntity.isPresent()) {
+        CartEntity roomBooked = cartRepository.findByIdRoomAndIdUser(cartRequest.getIdUser(), cartRequest.getIdRoom());
+
+        if (roomEntity.isPresent() && userEntity.isPresent() && roomBooked == null) {
             cart.setDelete(false);
             cart.setRoom(roomEntity.get());
             cart.setUser(userEntity.get());
@@ -76,5 +78,11 @@ public class CartService implements CartServiceImp {
         } catch (Exception ex) {
             return false;
         }
+    }
+
+    @Override
+    public int countRoomsInCartByIdUser(int idUser) {
+        int number = cartRepository.countRoomsInCart(idUser);
+        return number;
     }
 }

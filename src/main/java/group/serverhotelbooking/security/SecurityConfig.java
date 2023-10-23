@@ -39,14 +39,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
-                .authorizeHttpRequests()
-                    .antMatchers("/login/**").permitAll()
-                    .antMatchers("/blog/**").hasRole(Constant.ROLE_ADMIN)
-                    .antMatchers(HttpMethod.POST,"/modify/**").permitAll()
-                    .antMatchers("/blog/**").permitAll()
-                    .antMatchers(HttpMethod.GET, "/users").hasRole(Constant.ROLE_ADMIN)
-                    .anyRequest().authenticated()
-                .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+            .authorizeHttpRequests()
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/blog/**").hasRole(Constant.ROLE_ADMIN)
+                .antMatchers(HttpMethod.POST,"/modify/**").permitAll()
+                .antMatchers("/blog/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/users").hasRole(Constant.ROLE_ADMIN)
+                .antMatchers("/reservation").permitAll()
+                .antMatchers("/rooms/**").permitAll()
+                .antMatchers("/carts/**").permitAll()
+                .anyRequest().authenticated()
+            .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
     }
 }
