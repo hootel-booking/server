@@ -12,4 +12,10 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<CartEntity, Integer> {
     @Query("SELECT c FROM CartEntity c  WHERE c.user.id = :idUser")
     List<CartEntity> findByIdUser(@Param("idUser") int idUser);
+
+    @Query("SELECT c FROM CartEntity c WHERE c.room.id = :idRoom AND c.user.id = :idUser")
+    CartEntity findByIdRoomAndIdUser(@Param("idUser") int idUser, @Param("idRoom") int idRoom);
+
+    @Query("SELECT COUNT(id) AS roomNumber FROM CartEntity WHERE user.id = :idUser")
+    int countRoomsInCart(@Param("idUser") int idUser);
 }

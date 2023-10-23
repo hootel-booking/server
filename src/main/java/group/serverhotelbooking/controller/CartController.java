@@ -53,4 +53,16 @@ public class CartController {
 
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/badge-cart/id={idUser}")
+    private ResponseEntity<?> countRoomsInCartByIdUser(@PathVariable int idUser) {
+        int number = cartServiceImp.countRoomsInCartByIdUser(idUser);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(number);
+        baseResponse.setMessage("Count Rooms In Cart");
+        baseResponse.setStatusCode(200);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
 }
