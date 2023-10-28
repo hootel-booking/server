@@ -1,10 +1,12 @@
 package group.serverhotelbooking.payload.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserRequest {
     private String firstname;
     private String lastName;
     private String phone;
-    private String avatar;
+    private MultipartFile file;
     private int idRole;
 
     public String getFirstname() {
@@ -31,12 +33,12 @@ public class UserRequest {
         this.phone = phone;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public MultipartFile getFile() {
+        return file;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     public int getIdRole() {

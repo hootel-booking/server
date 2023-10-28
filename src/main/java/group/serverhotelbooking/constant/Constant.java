@@ -6,4 +6,7 @@ public final class Constant {
     // ROLES
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_USER = "USER";
+
+    // PATH IMAGES
+    public static final String PATH_AVATARS = "\\avatars";
 }

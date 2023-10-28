@@ -8,6 +8,8 @@ public class UserResponse {
     private String email;
     private String phone;
     private String avatar;
+    private int idRole;
+    private String roleName;
 
     public int getId() {
         return id;
@@ -63,5 +65,21 @@ public class UserResponse {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public int getIdRole() {
+        return idRole;
+    }
+
+    public void setIdRole(int idRole) {
+        this.idRole = idRole;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

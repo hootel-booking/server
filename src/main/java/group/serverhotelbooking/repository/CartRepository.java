@@ -2,6 +2,7 @@ package group.serverhotelbooking.repository;
 
 import group.serverhotelbooking.entity.CartEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,8 @@ public interface CartRepository extends JpaRepository<CartEntity, Integer> {
 
     @Query("SELECT COUNT(id) AS roomNumber FROM CartEntity WHERE user.id = :idUser")
     int countRoomsInCart(@Param("idUser") int idUser);
+
+    @Modifying
+    @Query("DELETE FROM CartEntity WHERE user.id = :idUser")
+    void deleteCart(@Param("idUser") int idUser);
 }

@@ -44,10 +44,13 @@ public class SecurityConfig {
                 .antMatchers("/blog/**").hasRole(Constant.ROLE_ADMIN)
                 .antMatchers(HttpMethod.POST,"/modify/**").permitAll()
                 .antMatchers("/blog/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/users").hasRole(Constant.ROLE_ADMIN)
+                /*.antMatchers(HttpMethod.GET, "/users").hasRole(Constant.ROLE_ADMIN)*/
                 .antMatchers("/reservation").permitAll()
                 .antMatchers("/rooms/**").permitAll()
                 .antMatchers("/carts/**").permitAll()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/roles/**").permitAll()
+                .antMatchers("/file/**").permitAll()
                 .anyRequest().authenticated()
             .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

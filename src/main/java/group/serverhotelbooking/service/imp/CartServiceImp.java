@@ -13,4 +13,6 @@ public interface CartServiceImp {
     boolean deleteCartById(int id);
 
     int countRoomsInCartByIdUser(int idUser);
+
+    int deleteCart(int idUser);
 }
