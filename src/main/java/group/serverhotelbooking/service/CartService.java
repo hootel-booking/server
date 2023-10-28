@@ -11,12 +11,14 @@ import group.serverhotelbooking.repository.UserRepository;
 import group.serverhotelbooking.service.imp.CartServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CartService implements CartServiceImp {
     @Autowired
     private CartRepository cartRepository;
@@ -76,13 +78,30 @@ public class CartService implements CartServiceImp {
             cartRepository.deleteById(id);
             return true;
         } catch (Exception ex) {
+            System.out.println("Error " + ex);
             return false;
         }
     }
 
     @Override
     public int countRoomsInCartByIdUser(int idUser) {
-        int number = cartRepository.countRoomsInCart(idUser);
-        return number;
+        try {
+            int number = cartRepository.countRoomsInCart(idUser);
+            return number;
+        } catch (Exception ex) {
+            System.out.println("Error " + ex);
+            return 0;
+        }
+    }
+
+    @Override
+    public int deleteCart(int idUser) {
+        try {
+            cartRepository.deleteCart(idUser);
+            return 0;
+        } catch (Exception ex) {
+            System.out.println("Error " + ex);
+            return -1;
+        }
     }
 }

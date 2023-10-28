@@ -43,7 +43,7 @@ public class CartController {
     }
 
     @DeleteMapping("/id={id}")
-    private ResponseEntity<?> deleteCart(@PathVariable int id) {
+    private ResponseEntity<?> deleteCartById(@PathVariable int id) {
         boolean isSuccess = cartServiceImp.deleteCartById(id);
 
         BaseResponse baseResponse = new BaseResponse();
@@ -61,6 +61,18 @@ public class CartController {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setData(number);
         baseResponse.setMessage("Count Rooms In Cart");
+        baseResponse.setStatusCode(200);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/idUser={idUser}")
+    private ResponseEntity<?> deleteCart(@PathVariable int idUser) {
+        int number = cartServiceImp.deleteCart(idUser);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(number);
+        baseResponse.setMessage("Delete Cart By Id User");
         baseResponse.setStatusCode(200);
 
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
