@@ -46,7 +46,7 @@ public class RoomResponse {
     public void setSquare(int square) {
         this.square = square;
     }
-
+    
     public String getNameType() {
         return nameType;
     }

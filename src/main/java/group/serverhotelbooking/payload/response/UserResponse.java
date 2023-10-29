@@ -1,5 +1,6 @@
 package group.serverhotelbooking.payload.response;
 
+
 public class UserResponse {
     private int id;
     private String firstname;
