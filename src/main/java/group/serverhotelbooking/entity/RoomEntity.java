@@ -48,6 +48,8 @@ public class RoomEntity {
 
     @OneToMany(mappedBy = "room")
     private List<ReservationEntity> reservations;
+    @OneToMany (mappedBy = "room")
+    private List<RoomServiceEntity> roomServiceEntities;
 
     public int getId() {
         return id;
@@ -97,22 +99,6 @@ public class RoomEntity {
         this.updateDate = updateDate;
     }
 
-    public SizeEntity getSize() {
-        return size;
-    }
-
-    public void setSize(SizeEntity size) {
-        this.size = size;
-    }
-
-    public TypeEntity getType() {
-        return type;
-    }
-
-    public void setType(TypeEntity type) {
-        this.type = type;
-    }
-
     public String getMainImage() {
         return mainImage;
     }
@@ -127,6 +113,22 @@ public class RoomEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public SizeEntity getSize() {
+        return size;
+    }
+
+    public void setSize(SizeEntity size) {
+        this.size = size;
+    }
+
+    public TypeEntity getType() {
+        return type;
+    }
+
+    public void setType(TypeEntity type) {
+        this.type = type;
     }
 
     public List<ImageEntity> getImages() {
@@ -151,5 +153,13 @@ public class RoomEntity {
 
     public void setReservations(List<ReservationEntity> reservations) {
         this.reservations = reservations;
+    }
+
+    public List<RoomServiceEntity> getRoomServiceEntities() {
+        return roomServiceEntities;
+    }
+
+    public void setRoomServiceEntities(List<RoomServiceEntity> roomServiceEntities) {
+        this.roomServiceEntities = roomServiceEntities;
     }
 }

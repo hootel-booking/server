@@ -1,9 +1,20 @@
 package group.serverhotelbooking.payload;
 
+import org.springframework.http.HttpStatus;
+
 public class BaseResponse {
     private int statusCode;
     private String message;
     private Object data;
+
+    public BaseResponse(int statusCode, String message, Object data) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+    }
+
+    public BaseResponse() {
+    }
 
     public int getStatusCode() {
         return statusCode;

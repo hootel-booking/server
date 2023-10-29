@@ -2,6 +2,7 @@ package group.serverhotelbooking.controller;
 
 import group.serverhotelbooking.constant.Constant;
 import group.serverhotelbooking.payload.BaseResponse;
+import group.serverhotelbooking.payload.request.RoomRequest;
 import group.serverhotelbooking.payload.response.RoomResponse;
 import group.serverhotelbooking.service.imp.RoomServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,34 @@ public class RoomController {
         baseResponse.setMessage("Get Room By Id");
         baseResponse.setData(room);
 
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    private ResponseEntity<?> addRoom(@RequestBody RoomRequest roomRequest) {
+        boolean addRoomIsSuccess = roomServiceImp.addRoom(roomRequest);
+
+        BaseResponse baseResponse = new BaseResponse(200, "add room is success", HttpStatus.OK);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    private ResponseEntity<?> deleteRoom(@RequestParam int id) {
+        boolean deleteIsSuccess = roomServiceImp.deleteRoom(id);
+
+        BaseResponse baseResponse = new BaseResponse(200, "delete room successfully", deleteIsSuccess);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateRoom(@RequestBody RoomRequest roomRequest) {
+        boolean updateIsSuccess = roomServiceImp.updateRoom(roomRequest);
+
+        BaseResponse baseResponse = new BaseResponse(200, "updated room successfully", updateIsSuccess);
+
+        System.out.println(baseResponse + "jdjdwo");
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 }
