@@ -117,12 +117,12 @@ public class UserService implements UserServiceImp {
         Optional<UserEntity> user = userRepository.findById(id);
 
         if (user.isPresent()) {
-            fileServiceImp.handleStoreImage(userRequest.getFile(), pathFolderStore);
+            String filename = fileServiceImp.handleStoreImage(userRequest.getFile(), pathFolderStore);
             UserEntity userTemp = user.get();
             userTemp.setFirstname(userRequest.getFirstname());
             userTemp.setLastName(userRequest.getLastName());
             userTemp.setPhone(userRequest.getPhone());
-            userTemp.setAvatar(userRequest.getFile().getOriginalFilename());
+            userTemp.setAvatar(filename);
 
             try {
                 userRepository.save(userTemp);

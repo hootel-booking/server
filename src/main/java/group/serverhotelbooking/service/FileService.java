@@ -7,12 +7,15 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class FileService implements FileServiceImp {
@@ -20,20 +23,31 @@ public class FileService implements FileServiceImp {
     private String rootFolder;
 
     @Override
-    public void handleStoreImage(MultipartFile file, String pathFolderStore) throws IOException {
+    public String handleStoreImage(MultipartFile file, String pathFolderStore) throws IOException {
         String pathFolder = rootFolder + pathFolderStore;
-        String pathImage = pathFolder + "\\" + file.getOriginalFilename();
+
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+        String pathImage = pathFolder + File.separator + fileName;
         Path path = Paths.get(pathFolder);
         Path pathImageCopy = Paths.get(pathImage);
-        if (!Files.exists(path)) {
-            Files.createDirectory(path);
+
+        try (InputStream inputStream = file.getInputStream()) {
+            if (!Files.exists(path)) {
+                Files.createDirectory(path);
+            }
+            Files.copy(inputStream, pathImageCopy, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw e;
         }
-        Files.copy(file.getInputStream(), pathImageCopy, StandardCopyOption.REPLACE_EXISTING);
+
+
+        return fileName;
     }
 
     @Override
     public Resource loadImage(String fileName, String pathFolderStore) throws MalformedURLException {
-        String pathFolder = rootFolder + pathFolderStore;
+        String pathFolder = rootFolder + "\\" + pathFolderStore;
         Path path = Paths.get(pathFolder);
         Path pathImage = path.resolve(fileName);
         Resource resource = new UrlResource(pathImage.toUri());
