@@ -23,6 +23,7 @@ public class SignupService implements SignupServiceImp {
         UserEntity userEntity = new UserEntity();
 
         userEntity.setUserName(signUpRequest.getUsername());
+        userEntity.setPhone(signUpRequest.getPhone());
         userEntity.setEmail(signUpRequest.getEmail());
         userEntity.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
