@@ -4,7 +4,9 @@ package group.serverhotelbooking.controller;
 import com.google.gson.Gson;
 import group.serverhotelbooking.payload.BaseResponse;
 import group.serverhotelbooking.payload.request.LoginRequest;
+import group.serverhotelbooking.payload.request.SignUpRequest;
 import group.serverhotelbooking.service.imp.LoginAuthenServiceImp;
+import group.serverhotelbooking.service.imp.SignupServiceImp;
 import group.serverhotelbooking.util.JwtHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,14 +34,14 @@ public class LoginController {
 
     @Autowired
     private LoginAuthenServiceImp loginAuthenServiceImp;
-//
-//    @Autowired
-//    SignupServiceImp signupServiceImp;
+
+    @Autowired
+    SignupServiceImp signupServiceImp;
 
     private Gson gson = new Gson();
 
     @PostMapping("/signin")
-    public ResponseEntity<?> siginin(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> siginin( @RequestBody  LoginRequest loginRequest) {
         Authentication authenticate = authenticationManager.authenticate
                 (new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -82,16 +84,16 @@ public class LoginController {
 
     }
 
-//    @PostMapping("/signup")
-//    public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
-//
-//        boolean isSuccess = signupServiceImp.insertUser(signUpRequest);
-//
-//        BaseResponse baseResponse = new BaseResponse();
-//        baseResponse.setStatusCode(200);
-//        baseResponse.setMessage("");
-//        baseResponse.setData(isSuccess);
-//
-//        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
-//    }
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
+
+        boolean isSuccess = signupServiceImp.insertUser(signUpRequest);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setStatusCode(200);
+        baseResponse.setMessage(isSuccess? "Successfully signed up":"Error");
+        baseResponse.setData(isSuccess);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
 }

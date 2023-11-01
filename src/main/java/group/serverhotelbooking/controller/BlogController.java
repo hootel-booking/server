@@ -28,7 +28,7 @@ public class BlogController {
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("/details")
     public ResponseEntity<?> getBlogDetails(@RequestParam int id) {
         BlogResponse blogResponse = blogServiceImp.showBlog(id);
         BaseResponse baseResponse = new BaseResponse(200, "show blog detail successfully", blogResponse);
