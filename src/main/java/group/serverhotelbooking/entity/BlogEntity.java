@@ -21,8 +21,6 @@ public class BlogEntity {
     private String title;
     @Column (name = "create_date")
     private Date createDate;
-    @Column (name = "url_main_image")
-    private String urlMainImage;
 
     @Column (name = "name_main_image")
     private String nameMainImage;
@@ -58,14 +56,6 @@ public class BlogEntity {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    public String getUrlMainImage() {
-        return urlMainImage;
-    }
-
-    public void setUrlMainImage(String urlMainImage) {
-        this.urlMainImage = urlMainImage;
     }
 
     public String getNameMainImage() {

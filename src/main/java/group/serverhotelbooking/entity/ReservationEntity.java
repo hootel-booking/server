@@ -37,6 +37,9 @@ public class ReservationEntity {
     @Column(name = "deposit")
     private double deposit;
 
+    @Column(name = "update_date")
+    private Date updateDate;
+
     @ManyToOne
     @JoinColumn(name = "id_room")
     private RoomEntity room;
@@ -163,5 +166,13 @@ public class ReservationEntity {
 
     public void setUpdateBy(UserEntity updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 }
