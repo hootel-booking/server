@@ -5,6 +5,15 @@ public class BaseResponse {
     private String message;
     private Object data;
 
+    public BaseResponse(int statusCode, String message, Object data) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+    }
+
+    public BaseResponse() {
+    }
+
     public int getStatusCode() {
         return statusCode;
     }

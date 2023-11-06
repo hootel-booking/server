@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,21 +37,22 @@ public class SecurityConfig {
                 .authenticationProvider(customAuthenProvider)
                 .build();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
-            .authorizeHttpRequests()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests()
                 .antMatchers("/login/**").permitAll()
-                .antMatchers("/blog/**").hasRole(Constant.ROLE_ADMIN)
-                .antMatchers(HttpMethod.POST,"/modify/**").permitAll()
-                .antMatchers("/blog/**").permitAll()
-                /*.antMatchers(HttpMethod.GET, "/users").hasRole(Constant.ROLE_ADMIN)*/
-                .antMatchers("/reservation/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/modify/**").permitAll()
+                .antMatchers("/reservation").permitAll()
                 .antMatchers("/rooms/**").permitAll()
                 .antMatchers("/carts/**").permitAll()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/roles/**").permitAll()
                 .antMatchers("/file/**").permitAll()
+                .antMatchers("/blog/**").permitAll()
                 .antMatchers("/status").permitAll()
                 .anyRequest().authenticated()
             .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
