@@ -41,6 +41,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     private List<ReservationEntity> reservations;
 
+    @OneToMany(mappedBy = "updateBy")
+    private List<ReservationEntity> reservationEntities;
+
     public int getId() {
         return id;
     }
@@ -119,5 +122,21 @@ public class UserEntity {
 
     public void setRoleEntity(RoleEntity roleEntity) {
         this.roleEntity = roleEntity;
+    }
+
+    public List<ReservationEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<ReservationEntity> reservations) {
+        this.reservations = reservations;
+    }
+
+    public List<ReservationEntity> getReservationEntities() {
+        return reservationEntities;
+    }
+
+    public void setReservationEntities(List<ReservationEntity> reservationEntities) {
+        this.reservationEntities = reservationEntities;
     }
 }

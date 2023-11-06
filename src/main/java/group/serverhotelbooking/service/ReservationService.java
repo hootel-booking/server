@@ -5,6 +5,7 @@ import group.serverhotelbooking.entity.RoomEntity;
 import group.serverhotelbooking.entity.StatusEntity;
 import group.serverhotelbooking.entity.UserEntity;
 import group.serverhotelbooking.payload.request.ReservationRequest;
+import group.serverhotelbooking.payload.response.ReservationResponse;
 import group.serverhotelbooking.repository.ReservationRepository;
 import group.serverhotelbooking.repository.RoomRepository;
 import group.serverhotelbooking.repository.StatusRepository;
@@ -13,7 +14,9 @@ import group.serverhotelbooking.service.imp.ReservationServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,8 +42,8 @@ public class ReservationService implements ReservationServiceImp {
         Optional<StatusEntity> status = statusRepository.findById(reservationRequest.getIdStatus());
 
         if (room.isPresent() && user.isPresent() && status.isPresent()) {
-            reservation.setDateCheckIn(reservationRequest.getDateCheckIn());
-            reservation.setDateCheckout(reservationRequest.getDateCheckout());
+            /*reservation.setDateCheckIn(reservationRequest.getDateCheckIn());
+            reservation.setDateCheckout(reservationRequest.getDateCheckout());*/
             reservation.setAdultNumber(reservationRequest.getAdultNumber());
             reservation.setChildNumber(reservationRequest.getChildNumber());
             reservation.setPrice(reservationRequest.getPrice());
@@ -64,6 +67,86 @@ public class ReservationService implements ReservationServiceImp {
 
     @Override
     public boolean checkAvailability(int idRoom, Date dateCheckin, Date dateCheckout) {
+        ReservationEntity result = reservationRepository.checkRoomAvailability(idRoom, dateCheckin, dateCheckout);
+        System.out.println(result);
+        return false;
+    }
+
+    @Override
+    public List<ReservationResponse> getListReservation() {
+        List<ReservationEntity> reservations = reservationRepository.findAll();
+        List<ReservationResponse> responseList = new ArrayList<>();
+
+        for (ReservationEntity reservationEntity : reservations) {
+            ReservationResponse response = new ReservationResponse();
+            response.setId(reservationEntity.getId());
+            response.setDateCheckIn(reservationEntity.getDateCheckIn());
+            response.setDateCheckout(reservationEntity.getDateCheckout());
+            response.setAdultNumber(reservationEntity.getAdultNumber());
+            response.setChildNumber(reservationEntity.getChildNumber());
+            response.setPrice(reservationEntity.getPrice());
+            response.setDiscount(reservationEntity.getDiscount());
+            response.setCreateDate(reservationEntity.getCreateDate());
+            response.setRoomName(reservationEntity.getRoom().getName());
+            response.setEmailUser(reservationEntity.getUser().getEmail());
+            response.setStatus(reservationEntity.getStatus().getName());
+            response.setPhoneUser(reservationEntity.getUser().getPhone());
+
+            responseList.add(response);
+        }
+
+        return responseList;
+    }
+
+    @Override
+    public ReservationResponse findReservationById(int id) {
+        Optional<ReservationEntity> entity = reservationRepository.findById(id);
+        ReservationResponse response = new ReservationResponse();
+
+        if (entity.isPresent()) {
+            ReservationEntity reservationEntity = entity.get();
+            response.setId(reservationEntity.getId());
+            response.setDateCheckIn(reservationEntity.getDateCheckIn());
+            response.setDateCheckout(reservationEntity.getDateCheckout());
+            response.setAdultNumber(reservationEntity.getAdultNumber());
+            response.setChildNumber(reservationEntity.getChildNumber());
+            response.setPrice(reservationEntity.getPrice());
+            response.setDiscount(reservationEntity.getDiscount());
+            response.setCreateDate(reservationEntity.getCreateDate());
+            response.setNote(reservationEntity.getNote());
+            response.setRoomName(reservationEntity.getRoom().getName());
+            response.setEmailUser(reservationEntity.getUser().getEmail());
+            response.setPhoneUser(reservationEntity.getUser().getPhone());
+            response.setStatus(reservationEntity.getStatus().getName());
+            response.setFirstName(reservationEntity.getUser().getFirstname());
+            response.setLastName(reservationEntity.getUser().getLastName());
+            response.setIdStatus(reservationEntity.getStatus().getId());
+            response.setDeposit(reservationEntity.getDeposit());
+        }
+
+        return response;
+    }
+
+    @Override
+    public boolean updateReservationById(int id, ReservationRequest request) {
+        Optional<ReservationEntity> reservationEntity = reservationRepository.findById(id);
+
+        if (reservationEntity.isPresent()) {
+            ReservationEntity reservationTemp = reservationEntity.get();
+            reservationTemp.setDeposit(request.getDeposit());
+
+            StatusEntity status = new StatusEntity();
+            status.setId(request.getIdStatus());
+            reservationTemp.setStatus(status);
+
+            try {
+                reservationRepository.save(reservationTemp);
+                return true;
+            } catch (Exception ex) {
+                System.out.println("Error " + ex);
+                return false;
+            }
+        }
 
         return false;
     }

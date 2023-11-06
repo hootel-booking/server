@@ -1,63 +1,31 @@
-package group.serverhotelbooking.entity;
+package group.serverhotelbooking.payload.response;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "reservation")
-public class ReservationEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "check_in")
+public class ReservationResponse {
+    private int id;
     private Date dateCheckIn;
-
-    @Column(name = "check_out")
     private Date dateCheckout;
-
-    @Column(name = "adult_number")
     private int adultNumber;
-
-    @Column(name = "child_number")
     private int childNumber;
-
-    @Column(name = "price")
     private double price;
-
-    @Column(name = "discount")
     private int discount;
-
-    @Column(name = "createdate")
     private Date createDate;
-
-    @Column(name = "note")
+    private String roomName;
+    private String emailUser;
+    private String status;
+    private String phoneUser;
     private String note;
-
-    @Column(name = "deposit")
+    private String firstName;
+    private String lastName;
+    private int idStatus;
     private double deposit;
 
-    @ManyToOne
-    @JoinColumn(name = "id_room")
-    private RoomEntity room;
-
-    @OneToOne
-    @JoinColumn(name = "id_user")
-    private UserEntity user;
-
-    @OneToOne
-    @JoinColumn(name = "id_status")
-    private StatusEntity status;
-
-    @OneToOne
-    @JoinColumn(name = "update_by")
-    private UserEntity updateBy;
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -117,6 +85,38 @@ public class ReservationEntity {
         this.createDate = createDate;
     }
 
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getEmailUser() {
+        return emailUser;
+    }
+
+    public void setEmailUser(String emailUser) {
+        this.emailUser = emailUser;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPhoneUser() {
+        return phoneUser;
+    }
+
+    public void setPhoneUser(String phoneUser) {
+        this.phoneUser = phoneUser;
+    }
+
     public String getNote() {
         return note;
     }
@@ -125,28 +125,28 @@ public class ReservationEntity {
         this.note = note;
     }
 
-    public RoomEntity getRoom() {
-        return room;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setRoom(RoomEntity room) {
-        this.room = room;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public StatusEntity getStatus() {
-        return status;
+    public int getIdStatus() {
+        return idStatus;
     }
 
-    public void setStatus(StatusEntity status) {
-        this.status = status;
+    public void setIdStatus(int idStatus) {
+        this.idStatus = idStatus;
     }
 
     public double getDeposit() {
@@ -155,13 +155,5 @@ public class ReservationEntity {
 
     public void setDeposit(double deposit) {
         this.deposit = deposit;
-    }
-
-    public UserEntity getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(UserEntity updateBy) {
-        this.updateBy = updateBy;
     }
 }
