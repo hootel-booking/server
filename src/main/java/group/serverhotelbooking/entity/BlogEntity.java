@@ -36,4 +36,67 @@ public class BlogEntity {
     @OneToMany (mappedBy = "blogEntity")
     private List<CommentEntity> commentEntity;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getUrlMainImage() {
+        return urlMainImage;
+    }
+
+    public void setUrlMainImage(String urlMainImage) {
+        this.urlMainImage = urlMainImage;
+    }
+
+    public String getNameMainImage() {
+        return nameMainImage;
+    }
+
+    public void setNameMainImage(String nameMainImage) {
+        this.nameMainImage = nameMainImage;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public List<CommentEntity> getCommentEntity() {
+        return commentEntity;
+    }
+
+    public void setCommentEntity(List<CommentEntity> commentEntity) {
+        this.commentEntity = commentEntity;
+    }
 }
