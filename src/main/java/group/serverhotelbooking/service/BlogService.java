@@ -29,7 +29,6 @@ public class BlogService implements BlogServiceImp {
             blogResponse.setTitle(blogEntity.getTitle());
             blogResponse.setCreateDate(blogEntity.getCreateDate());
             blogResponse.setContent(blogEntity.getContent());
-            blogResponse.setUrlMainImage(blogEntity.getUrlMainImage());
             blogResponse.setNameMainImage(blogEntity.getNameMainImage());
 
             UserResponse userResponse = new UserResponse();
@@ -55,7 +54,6 @@ public class BlogService implements BlogServiceImp {
             blogResponse.setTitle(blogEntity.getTitle());
             blogResponse.setCreateDate(blogEntity.getCreateDate());
             blogResponse.setContent(blogEntity.getContent());
-            blogResponse.setUrlMainImage(blogEntity.getUrlMainImage());
             blogResponse.setNameMainImage(blogEntity.getNameMainImage());
 
             blogResponseList.add(blogResponse);

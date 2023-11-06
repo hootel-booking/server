@@ -9,7 +9,6 @@ public class BlogResponse {
     private String title;
     private Date createDate;
     private String content;
-    private String urlMainImage;
     private String nameMainImage;
     private UserResponse userResponse;
 
@@ -43,14 +42,6 @@ public class BlogResponse {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getUrlMainImage() {
-        return urlMainImage;
-    }
-
-    public void setUrlMainImage(String urlMainImage) {
-        this.urlMainImage = urlMainImage;
     }
 
     public String getNameMainImage() {
