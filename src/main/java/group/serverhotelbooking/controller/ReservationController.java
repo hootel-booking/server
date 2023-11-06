@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/reservation")
-public class ReservationController {
+public class  ReservationController {
     @Autowired
     private Common common;
 

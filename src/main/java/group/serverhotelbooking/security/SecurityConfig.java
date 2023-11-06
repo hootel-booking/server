@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/modify/**").permitAll()
-                .antMatchers("/reservation").permitAll()
+                .antMatchers("/reservation/**").permitAll()
                 .antMatchers("/rooms/**").permitAll()
                 .antMatchers("/carts/**").permitAll()
                 .antMatchers("/users/**").permitAll()
