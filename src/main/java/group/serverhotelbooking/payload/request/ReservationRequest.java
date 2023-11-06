@@ -1,10 +1,8 @@
 package group.serverhotelbooking.payload.request;
 
-import java.util.Date;
-
 public class ReservationRequest {
-    private Date dateCheckIn;
-    private Date dateCheckout;
+    private String dateCheckIn;
+    private String dateCheckOut;
     private int adultNumber;
     private int childNumber;
     private double price;
@@ -13,21 +11,22 @@ public class ReservationRequest {
     private int idRoom;
     private int idUser;
     private int idStatus;
+    private double deposit;
 
-    public Date getDateCheckIn() {
+    public String getDateCheckIn() {
         return dateCheckIn;
     }
 
-    public void setDateCheckIn(Date dateCheckIn) {
+    public void setDateCheckIn(String dateCheckIn) {
         this.dateCheckIn = dateCheckIn;
     }
 
-    public Date getDateCheckout() {
-        return dateCheckout;
+    public String getDateCheckOut() {
+        return dateCheckOut;
     }
 
-    public void setDateCheckout(Date dateCheckout) {
-        this.dateCheckout = dateCheckout;
+    public void setDateCheckOut(String dateCheckOut) {
+        this.dateCheckOut = dateCheckOut;
     }
 
     public int getAdultNumber() {
@@ -92,5 +91,13 @@ public class ReservationRequest {
 
     public void setIdStatus(int idStatus) {
         this.idStatus = idStatus;
+    }
+
+    public double getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(double deposit) {
+        this.deposit = deposit;
     }
 }

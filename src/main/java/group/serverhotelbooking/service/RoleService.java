@@ -4,7 +4,7 @@ import group.serverhotelbooking.entity.RoleEntity;
 import group.serverhotelbooking.payload.response.RoleResponse;
 import group.serverhotelbooking.repository.RoleRepository;
 import group.serverhotelbooking.service.imp.RoleServiceImp;
-import group.serverhotelbooking.util.ConvertRole;
+import group.serverhotelbooking.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class RoleService implements RoleServiceImp {
     private RoleRepository roleRepository;
 
     @Autowired
-    private ConvertRole convertRole;
+    private Common common;
 
     @Override
     public List<RoleResponse> getRoles() {
@@ -27,7 +27,7 @@ public class RoleService implements RoleServiceImp {
         for (RoleEntity role : roles) {
             RoleResponse roleResponse = new RoleResponse();
             roleResponse.setId(role.getId());
-            roleResponse.setName(convertRole.handleConvertRole(role.getName()));
+            roleResponse.setName(common.handleConvertRole(role.getName()));
             roleResponses.add(roleResponse);
         }
 

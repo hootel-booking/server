@@ -1,7 +1,5 @@
 package group.serverhotelbooking.payload;
 
-import org.springframework.http.HttpStatus;
-
 public class BaseResponse {
     private int statusCode;
     private String message;

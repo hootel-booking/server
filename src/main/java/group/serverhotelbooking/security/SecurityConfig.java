@@ -1,5 +1,6 @@
 package group.serverhotelbooking.security;
 
+import group.serverhotelbooking.constant.Constant;
 import group.serverhotelbooking.filter.JwtFilter;
 import group.serverhotelbooking.provider.CustomAuthenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Autowired
     CustomAuthenProvider customAuthenProvider;
 
@@ -53,8 +53,9 @@ public class SecurityConfig {
                 .antMatchers("/roles/**").permitAll()
                 .antMatchers("/file/**").permitAll()
                 .antMatchers("/blog/**").permitAll()
+                .antMatchers("/status").permitAll()
                 .anyRequest().authenticated()
-                .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+            .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
     }
 }

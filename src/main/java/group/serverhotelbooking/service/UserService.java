@@ -1,6 +1,5 @@
 package group.serverhotelbooking.service;
 
-import group.serverhotelbooking.constant.Constant;
 import group.serverhotelbooking.entity.RoleEntity;
 import group.serverhotelbooking.entity.UserEntity;
 import group.serverhotelbooking.payload.request.UserRequest;
@@ -8,13 +7,12 @@ import group.serverhotelbooking.payload.response.UserResponse;
 import group.serverhotelbooking.repository.UserRepository;
 import group.serverhotelbooking.service.imp.FileServiceImp;
 import group.serverhotelbooking.service.imp.UserServiceImp;
-import group.serverhotelbooking.util.ConvertRole;
+import group.serverhotelbooking.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +30,7 @@ public class UserService implements UserServiceImp {
     private UserRepository userRepository;
 
     @Autowired
-    private ConvertRole convertRole;
+    private Common common;
 
     @Override
     public List<UserResponse> getAllUser() {
@@ -47,7 +45,7 @@ public class UserService implements UserServiceImp {
             userTemp.setUserName(user.getUserName());
             userTemp.setEmail(user.getEmail());
             userTemp.setPhone(user.getPhone());
-            userTemp.setRoleName(convertRole.handleConvertRole(user.getRoleEntity().getName()));
+            userTemp.setRoleName(common.handleConvertRole(user.getRoleEntity().getName()));
 
             users.add(userTemp);
         }
