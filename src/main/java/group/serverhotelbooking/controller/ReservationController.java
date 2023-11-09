@@ -1,6 +1,5 @@
 package group.serverhotelbooking.controller;
 
-import group.serverhotelbooking.entity.ReservationEntity;
 import group.serverhotelbooking.payload.BaseResponse;
 import group.serverhotelbooking.payload.request.ReservationRequest;
 import group.serverhotelbooking.payload.response.ReservationResponse;
@@ -11,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @CrossOrigin
@@ -24,7 +24,7 @@ public class  ReservationController {
     private ReservationServiceImp reservationServiceImp;
 
     @PostMapping("")
-    private ResponseEntity<?> insertReservation(@RequestBody ReservationRequest reservationRequest) {
+    private ResponseEntity<?> insertReservation(@RequestBody ReservationRequest reservationRequest) throws ParseException {
         boolean isSuccess = reservationServiceImp.insertReservation(reservationRequest);
 
         BaseResponse baseResponse = new BaseResponse();
@@ -36,7 +36,10 @@ public class  ReservationController {
     }
 
     @PostMapping("/idRoom={idRoom}")
-    private ResponseEntity<?> checkRoomAvailability(@PathVariable int idRoom, @RequestBody ReservationRequest reservationRequest) {
+    private ResponseEntity<?> checkRoomAvailability(
+            @PathVariable int idRoom,
+            @RequestBody ReservationRequest reservationRequest
+    ) throws ParseException {
         boolean isSuccess = reservationServiceImp.checkAvailability(idRoom,
                 common.convertStringToDate(reservationRequest.getDateCheckIn()),
                 common.convertStringToDate(reservationRequest.getDateCheckOut()));
@@ -80,6 +83,18 @@ public class  ReservationController {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setData(isSuccess);
         baseResponse.setMessage("Update Reservation By Id");
+        baseResponse.setStatusCode(200);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/idUser={idUser}")
+    private ResponseEntity<?> getReservationByIdUser(@PathVariable int idUser) {
+        List<ReservationResponse> reservationEntities = reservationServiceImp.getListReservationByIdUser(idUser);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(reservationEntities);
+        baseResponse.setMessage("Get Reservation By Id User");
         baseResponse.setStatusCode(200);
 
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);

@@ -11,6 +11,7 @@ import group.serverhotelbooking.repository.RoomRepository;
 import group.serverhotelbooking.repository.StatusRepository;
 import group.serverhotelbooking.repository.UserRepository;
 import group.serverhotelbooking.service.imp.ReservationServiceImp;
+import group.serverhotelbooking.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ import java.util.Optional;
 
 @Service
 public class ReservationService implements ReservationServiceImp {
+    @Autowired
+    private Common common;
+
     @Autowired
     private ReservationRepository reservationRepository;
 
@@ -42,8 +46,8 @@ public class ReservationService implements ReservationServiceImp {
         Optional<StatusEntity> status = statusRepository.findById(reservationRequest.getIdStatus());
 
         if (room.isPresent() && user.isPresent() && status.isPresent()) {
-            /*reservation.setDateCheckIn(reservationRequest.getDateCheckIn());
-            reservation.setDateCheckout(reservationRequest.getDateCheckout());*/
+            reservation.setDateCheckIn(common.convertStringToDate(reservationRequest.getDateCheckIn()));
+            reservation.setDateCheckout(common.convertStringToDate(reservationRequest.getDateCheckOut()));
             reservation.setAdultNumber(reservationRequest.getAdultNumber());
             reservation.setChildNumber(reservationRequest.getChildNumber());
             reservation.setPrice(reservationRequest.getPrice());
@@ -52,6 +56,7 @@ public class ReservationService implements ReservationServiceImp {
             reservation.setRoom(room.get());
             reservation.setUser(user.get());
             reservation.setStatus(status.get());
+            reservation.setCreateDate(common.getCurrentDateTime());
 
             try {
                 reservationRepository.save(reservation);
@@ -67,9 +72,8 @@ public class ReservationService implements ReservationServiceImp {
 
     @Override
     public boolean checkAvailability(int idRoom, Date dateCheckin, Date dateCheckout) {
-        ReservationEntity result = reservationRepository.checkRoomAvailability(idRoom, dateCheckin, dateCheckout);
-        System.out.println(result);
-        return false;
+        List<ReservationEntity> result = reservationRepository.checkRoomAvailability(idRoom, dateCheckin, dateCheckout);
+        return result.size() < 1;
     }
 
     @Override
@@ -149,5 +153,25 @@ public class ReservationService implements ReservationServiceImp {
         }
 
         return false;
+    }
+
+    @Override
+    public List<ReservationResponse> getListReservationByIdUser(int idUser) {
+        List<ReservationEntity> listReservation = reservationRepository.findListReservationByIdUser(idUser);
+        List<ReservationResponse> reservationResponseList = new ArrayList<>();
+
+        for(ReservationEntity reservationEntity : listReservation) {
+            ReservationResponse response = new ReservationResponse();
+            response.setId(reservationEntity.getId());
+            response.setRoomName(reservationEntity.getRoom().getName());
+            response.setDateCheckIn(reservationEntity.getDateCheckIn());
+            response.setDateCheckout(reservationEntity.getDateCheckout());
+            response.setPrice(reservationEntity.getPrice());
+            response.setDiscount(reservationEntity.getDiscount());
+            response.setStatus(reservationEntity.getStatus().getName());
+            reservationResponseList.add(response);
+        }
+
+        return reservationResponseList;
     }
 }

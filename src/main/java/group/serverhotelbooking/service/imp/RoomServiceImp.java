@@ -4,6 +4,8 @@ import group.serverhotelbooking.payload.request.RoomRequest;
 import group.serverhotelbooking.payload.response.RoomResponse;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface RoomServiceImp {
     Page<RoomResponse> getAllRoom(int page, int size);
 
@@ -12,4 +14,6 @@ public interface RoomServiceImp {
     boolean addRoom(RoomRequest roomRequest);
     boolean deleteRoom(int id);
     boolean updateRoom(RoomRequest roomRequest);
+
+    List<RoomResponse> getRooms();
 }
