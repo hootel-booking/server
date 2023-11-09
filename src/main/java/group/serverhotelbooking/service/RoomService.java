@@ -172,4 +172,19 @@ public class RoomService implements RoomServiceImp {
             return false;
         }
     }
+
+    @Override
+    public List<RoomResponse> getRooms() {
+        List<RoomEntity> rooms = roomRepository.findAll();
+        List<RoomResponse> roomResponses = new ArrayList<>();
+
+        for(RoomEntity room : rooms) {
+            RoomResponse response = new RoomResponse();
+            response.setId(room.getId());
+            response.setName(room.getName());
+            roomResponses.add(response);
+        }
+
+        return roomResponses;
+    }
 }

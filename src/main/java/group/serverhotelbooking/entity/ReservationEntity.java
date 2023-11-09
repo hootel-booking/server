@@ -28,7 +28,7 @@ public class ReservationEntity {
     @Column(name = "discount")
     private int discount;
 
-    @Column(name = "createdate")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Column(name = "note")

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/rooms")
@@ -67,6 +69,18 @@ public class RoomController {
         BaseResponse baseResponse = new BaseResponse(200, "updated room successfully", updateIsSuccess);
 
         System.out.println(baseResponse + "jdjdwo");
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    private ResponseEntity<?> getAllRooms() {
+        List<RoomResponse> rooms = roomServiceImp.getRooms();
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setStatusCode(200);
+        baseResponse.setMessage("Get List Rooms");
+        baseResponse.setData(rooms);
+
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 }
