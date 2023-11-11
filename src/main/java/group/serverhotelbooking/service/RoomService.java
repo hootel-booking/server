@@ -7,24 +7,38 @@ import group.serverhotelbooking.entity.TypeEntity;
 import group.serverhotelbooking.payload.request.RoomRequest;
 import group.serverhotelbooking.payload.response.ImageResponse;
 import group.serverhotelbooking.payload.response.RoomResponse;
+import group.serverhotelbooking.payload.response.SizeResponse;
+import group.serverhotelbooking.payload.response.TypeResponse;
 import group.serverhotelbooking.repository.ImageRepository;
 import group.serverhotelbooking.repository.ModifyRoomRepository;
 import group.serverhotelbooking.repository.RoomRepository;
 import group.serverhotelbooking.service.imp.RoomServiceImp;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+
+@Slf4j
 @Service
+
 public class RoomService implements RoomServiceImp {
+    @Value("${assets.root.folder}")
+    private String folderRoot;
     @Autowired
     private RoomRepository roomRepository;
 
@@ -91,8 +105,19 @@ public class RoomService implements RoomServiceImp {
     }
 
     @Override
-    public boolean addRoom(RoomRequest roomRequest) {
+    public boolean addRoom(RoomRequest roomRequest, List <MultipartFile> multipartFile)  {
         try {
+            Path root = Paths.get(folderRoot);
+            if (!Files.exists(root)) {
+                Files.createDirectory(root);
+            }
+            String listImageName = "";
+            for(MultipartFile file : multipartFile){
+                Files.copy(file.getInputStream(), root.resolve(file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                listImageName+= file.getOriginalFilename() + ",";
+
+            }
+            listImageName= listImageName.substring(0, listImageName.length()-1);
             RoomEntity roomEntity = new RoomEntity();
 
             roomEntity.setName(roomRequest.getName());
@@ -100,15 +125,10 @@ public class RoomService implements RoomServiceImp {
             roomEntity.setPrice(roomRequest.getPrice());
 
             Date now = new Date();
+            roomEntity.setCreateDate(now);
 
-            // Kiểm tra xem phòng đã tồn tại hay chưa
-            if (roomRequest.getId() != -1) {
-                roomEntity.setUpdateDate(now);
-            } else {
-                roomEntity.setCreateDate(now);
-            }
 
-            roomEntity.setMainImage(roomRequest.getMainImage());
+            roomEntity.setMainImage(listImageName.trim());
             roomEntity.setDescription(roomRequest.getDescription());
 
             SizeEntity sizeEntity = new SizeEntity();
@@ -153,10 +173,16 @@ public class RoomService implements RoomServiceImp {
                 roomEntity.setMainImage(roomRequest.getMainImage());
                 roomEntity.setDescription(roomRequest.getDescription());
 
+                Date now = new Date();
+
+                // Kiểm tra xem phòng đã tồn tại hay chưa
                 if (roomRequest.getId_size() != 0) {
+                    roomEntity.setUpdateDate(now);
                     SizeEntity sizeEntity = new SizeEntity();
                     sizeEntity.setId(roomRequest.getId_size());
                     roomEntity.setSize(sizeEntity);
+                } else {
+                    roomEntity.setCreateDate(now);
                 }
                 if (roomRequest.getId_type() != 0) {
                     TypeEntity typeEntity = new TypeEntity();
@@ -170,6 +196,31 @@ public class RoomService implements RoomServiceImp {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public List<RoomResponse> getListRoom() {
+        try {
+            List<RoomEntity> roomEntityList = modifyRoomRepository.findAll();
+            return
+                    roomEntityList.stream().map(roomEntity -> RoomResponse.builder()
+                            .id(roomEntity.getId())
+                            .name(roomEntity.getName())
+                            .price(roomEntity.getPrice())
+                            .description(roomEntity.getDescription())
+                            .createDate(roomEntity.getCreateDate())
+                            .updateDate(roomEntity.getUpdateDate())
+                            .mainImage(List.of(roomEntity.getMainImage().split(",")))
+                            .discount(roomEntity.getDiscount())
+                            .sizeResponse(new SizeResponse(0, roomEntity.getSize().getSquare()))
+                            .typeResponse(new TypeResponse(0, roomEntity.getType().getName()))
+                            .build()).toList();
+
+
+        } catch (Exception e) {
+            log.info("Exception " + e.getLocalizedMessage());
+            return null;
         }
     }
 }

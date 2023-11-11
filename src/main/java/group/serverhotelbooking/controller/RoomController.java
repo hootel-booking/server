@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -42,9 +45,18 @@ public class RoomController {
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 
+    @GetMapping()
+    private ResponseEntity<?> getListRoom(){
+        BaseResponse baseResponse = new BaseResponse(200, "show room successfully",roomServiceImp.getListRoom() );
+        System.out.println("baseResponse" + baseResponse);
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+
+
     @PostMapping("/add")
-    private ResponseEntity<?> addRoom(@RequestBody RoomRequest roomRequest) {
-        boolean addRoomIsSuccess = roomServiceImp.addRoom(roomRequest);
+    private ResponseEntity<?> addRoom(@RequestPart RoomRequest roomRequest, @RequestParam List <MultipartFile> multipartFile) {
+        boolean addRoomIsSuccess = roomServiceImp.addRoom(roomRequest, multipartFile);
 
         BaseResponse baseResponse = new BaseResponse(200, "add room is success", HttpStatus.OK);
 

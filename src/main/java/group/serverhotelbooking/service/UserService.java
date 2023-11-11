@@ -47,6 +47,7 @@ public class UserService implements UserServiceImp {
             userTemp.setUserName(user.getUserName());
             userTemp.setEmail(user.getEmail());
             userTemp.setPhone(user.getPhone());
+
             userTemp.setRoleName(convertRole.handleConvertRole(user.getRoleEntity().getName()));
 
             users.add(userTemp);

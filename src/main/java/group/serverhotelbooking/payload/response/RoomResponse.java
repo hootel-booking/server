@@ -1,9 +1,17 @@
 package group.serverhotelbooking.payload.response;
 
 import group.serverhotelbooking.entity.ImageEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
-
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoomResponse {
     private int id;
     private String name;
@@ -15,75 +23,12 @@ public class RoomResponse {
     private int discount;
     private List<ImageResponse> images;
 
-    public int getId() {
-        return id;
-    }
+    private Date createDate;
+    private Date updateDate;
+    private  List <String> mainImage;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    private SizeResponse sizeResponse;
+    private TypeResponse typeResponse;
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getSquare() {
-        return square;
-    }
-
-    public void setSquare(int square) {
-        this.square = square;
-    }
-    
-    public String getNameType() {
-        return nameType;
-    }
-
-    public void setNameType(String nameType) {
-        this.nameType = nameType;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
-
-    public List<ImageResponse> getImages() {
-        return images;
-    }
-
-    public void setImages(List<ImageResponse> images) {
-        this.images = images;
-    }
 }
