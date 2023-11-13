@@ -44,6 +44,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "updateBy")
     private List<ReservationEntity> reservationEntities;
 
+    @OneToOne(mappedBy = "user")
+    private BankAccountEntity bankAccountEntity;
+
     public int getId() {
         return id;
     }
@@ -138,5 +141,13 @@ public class UserEntity {
 
     public void setReservationEntities(List<ReservationEntity> reservationEntities) {
         this.reservationEntities = reservationEntities;
+    }
+
+    public BankAccountEntity getBankAccountEntity() {
+        return bankAccountEntity;
+    }
+
+    public void setBankAccountEntity(BankAccountEntity bankAccountEntity) {
+        this.bankAccountEntity = bankAccountEntity;
     }
 }

@@ -1,9 +1,11 @@
 package group.serverhotelbooking.service;
 
+import group.serverhotelbooking.entity.BankAccountEntity;
 import group.serverhotelbooking.entity.RoleEntity;
 import group.serverhotelbooking.entity.UserEntity;
 import group.serverhotelbooking.payload.request.UserRequest;
 import group.serverhotelbooking.payload.response.UserResponse;
+import group.serverhotelbooking.repository.BankAccountRepository;
 import group.serverhotelbooking.repository.UserRepository;
 import group.serverhotelbooking.service.imp.FileServiceImp;
 import group.serverhotelbooking.service.imp.UserServiceImp;
@@ -31,6 +33,9 @@ public class UserService implements UserServiceImp {
 
     @Autowired
     private Common common;
+
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
 
     @Override
     public List<UserResponse> getAllUser() {
@@ -106,6 +111,11 @@ public class UserService implements UserServiceImp {
             userResponse.setPhone(userEntity.getPhone());
             userResponse.setIdRole(userEntity.getRoleEntity().getId());
             userResponse.setAvatar(userEntity.getAvatar());
+
+            if (userEntity.getBankAccountEntity() != null) {
+                userResponse.setAccountNumber(userEntity.getBankAccountEntity().getAccountNumber());
+                userResponse.setAmount(userEntity.getBankAccountEntity().getAmount());
+            }
         }
 
         return userResponse;
@@ -121,6 +131,20 @@ public class UserService implements UserServiceImp {
             userTemp.setLastName(userRequest.getLastName());
             userTemp.setPhone(userRequest.getPhone());
             userTemp.setAvatar(filename);
+
+            BankAccountEntity bankAccountEntity = new BankAccountEntity();
+            bankAccountEntity.setAccountNumber(userRequest.getAccountNumber());
+
+            if (userRequest.getTransferAmount() >= 0) {
+                bankAccountEntity.setAmount(
+                        userTemp.getBankAccountEntity().getAmount() + userRequest.getTransferAmount()
+                );
+                bankAccountEntity.setTransferDate(common.getCurrentDateTime());
+                userTemp.setBankAccountEntity(bankAccountEntity);
+            } else {
+                System.out.println("Error: số tiền chuyển khoản không hợp lệ");
+                return false;
+            }
 
             try {
                 userRepository.save(userTemp);

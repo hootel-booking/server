@@ -12,6 +12,7 @@ public class ReservationRequest {
     private int idUser;
     private int idStatus;
     private double deposit;
+    private String accountNumber;
 
     public String getDateCheckIn() {
         return dateCheckIn;
@@ -99,5 +100,13 @@ public class ReservationRequest {
 
     public void setDeposit(double deposit) {
         this.deposit = deposit;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 }

@@ -1,15 +1,9 @@
 package group.serverhotelbooking.service;
 
-import group.serverhotelbooking.entity.ReservationEntity;
-import group.serverhotelbooking.entity.RoomEntity;
-import group.serverhotelbooking.entity.StatusEntity;
-import group.serverhotelbooking.entity.UserEntity;
+import group.serverhotelbooking.entity.*;
 import group.serverhotelbooking.payload.request.ReservationRequest;
 import group.serverhotelbooking.payload.response.ReservationResponse;
-import group.serverhotelbooking.repository.ReservationRepository;
-import group.serverhotelbooking.repository.RoomRepository;
-import group.serverhotelbooking.repository.StatusRepository;
-import group.serverhotelbooking.repository.UserRepository;
+import group.serverhotelbooking.repository.*;
 import group.serverhotelbooking.service.imp.ReservationServiceImp;
 import group.serverhotelbooking.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +31,30 @@ public class ReservationService implements ReservationServiceImp {
     @Autowired
     private StatusRepository statusRepository;
 
+    @Autowired
+    BankAccountRepository bankAccountRepository;
+
     @Override
     public boolean insertReservation(ReservationRequest reservationRequest) {
         ReservationEntity reservation = new ReservationEntity();
+        BankAccountEntity bankAccountEntity = new BankAccountEntity();
+
+        if (reservationRequest.getAccountNumber() != null) {
+            bankAccountEntity = bankAccountRepository.checkAccountByIdUser(
+                reservationRequest.getIdUser(),
+                reservationRequest.getAccountNumber()
+            );
+
+            if (bankAccountEntity == null) {
+                System.out.println("Error: Sai số tài khoản");
+                return false;
+            }
+
+            if (reservationRequest.getDeposit() > bankAccountEntity.getAmount()) {
+                System.out.println("Error: Không đủ tiền chuyển khoản");
+                return false;
+            }
+        }
 
         Optional<RoomEntity> room = roomRepository.findById(reservationRequest.getIdRoom());
         Optional<UserEntity> user = userRepository.findById(reservationRequest.getIdUser());
@@ -57,6 +72,20 @@ public class ReservationService implements ReservationServiceImp {
             reservation.setUser(user.get());
             reservation.setStatus(status.get());
             reservation.setCreateDate(common.getCurrentDateTime());
+
+            if (bankAccountEntity != null && bankAccountEntity.getIdUser() != 0) {
+                final double price = bankAccountEntity.getAmount() - reservationRequest.getDeposit();
+                bankAccountEntity.setAmount(price);
+                bankAccountEntity.setDepositDate(common.getCurrentDateTime());
+                reservation.setDeposit(price);
+
+                try {
+                    bankAccountRepository.save(bankAccountEntity);
+                } catch (Exception ex) {
+                    System.out.println("Error: " + ex);
+                    return false;
+                }
+            }
 
             try {
                 reservationRepository.save(reservation);
