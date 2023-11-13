@@ -71,13 +71,16 @@ public class UserController {
 
     @PutMapping("/profileId={id}")
     private ResponseEntity<?> editProfile(@PathVariable int id, @RequestParam String firstName,
-        @RequestParam String lastName, @RequestParam String phone, @RequestParam MultipartFile file
+        @RequestParam String lastName, @RequestParam String phone, @RequestParam String accountNumber,
+        @RequestParam double transferAmount, @RequestParam MultipartFile file
     ) throws Exception {
         UserRequest user = new UserRequest();
         user.setFirstname((firstName));
         user.setLastName(lastName);
         user.setPhone(phone);
         user.setFile(file);
+        user.setAccountNumber(accountNumber);
+        user.setTransferAmount(transferAmount);
 
         boolean isSuccess = userServiceImp.editProfile(id, user, Constant.PATH_AVATARS);
 

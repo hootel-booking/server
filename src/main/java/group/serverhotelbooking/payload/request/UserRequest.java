@@ -8,6 +8,8 @@ public class UserRequest {
     private String phone;
     private MultipartFile file;
     private int idRole;
+    private String accountNumber;
+    private double transferAmount;
 
     public String getFirstname() {
         return firstname;
@@ -47,5 +49,21 @@ public class UserRequest {
 
     public void setIdRole(int idRole) {
         this.idRole = idRole;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public double getTransferAmount() {
+        return transferAmount;
+    }
+
+    public void setTransferAmount(double transferAmount) {
+        this.transferAmount = transferAmount;
     }
 }

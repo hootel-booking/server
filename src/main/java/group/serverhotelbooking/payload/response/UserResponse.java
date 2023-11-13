@@ -10,6 +10,8 @@ public class UserResponse {
     private String avatar;
     private int idRole;
     private String roleName;
+    private String accountNumber;
+    private double amount;
 
     public int getId() {
         return id;
@@ -81,5 +83,21 @@ public class UserResponse {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }
