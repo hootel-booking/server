@@ -1,6 +1,7 @@
 package group.serverhotelbooking.provider;
 
 import group.serverhotelbooking.entity.UserEntity;
+import group.serverhotelbooking.payload.response.UserResponse;
 import group.serverhotelbooking.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -40,11 +41,15 @@ public class CustomAuthenProvider implements AuthenticationProvider {
                 GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(userEntity.getRoleEntity().getName());
                 roles.add(grantedAuthority);
 
-                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, userEntity.getPassword(), roles);
+                UserResponse user = new UserResponse();
+                user.setId(userEntity.getId());
+                user.setEmail(userEntity.getEmail());
+                user.setRoleName(userEntity.getRoleEntity().getName());
+
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, userEntity.getPassword(), roles);
 
                 SecurityContextHolder.getContext().setAuthentication(token);
                 return token;
-
             } else {
                 return null;
             }

@@ -30,24 +30,32 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String headerValue = request.getHeader("Authorization");
-        if (headerValue != null && headerValue.startsWith("Bearer ")) {
-            String token = headerValue.substring(7);
-            String data = jwtHelper.parseToken(token);
 
-            if (data != null && !data.isEmpty()) {
-                Type listType = new TypeToken<ArrayList<SimpleGrantedAuthority>>() {}.getType();
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
 
-
-                List<SimpleGrantedAuthority> roles = gson.fromJson(data,listType);
-
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken("", "", roles);
-                SecurityContext securityContext = SecurityContextHolder.getContext();
-                securityContext.setAuthentication(usernamePasswordAuthenticationToken);}
+        if ("OPTIONS".equals(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
         } else {
-            System.out.println("giá trị token không hợp lệ");
-        }
+            if (headerValue != null && headerValue.startsWith("Bearer ")) {
+                String token = headerValue.substring(7);
+                String data = jwtHelper.parseToken(token);
+                if (data != null && !data.isEmpty()) {
+                    Type listType = new TypeToken<ArrayList<SimpleGrantedAuthority>>() {}.getType();
 
-        filterChain.doFilter(request, response);
+                    List<SimpleGrantedAuthority> roles = gson.fromJson(data,listType);
+
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken("", "", roles);
+                    SecurityContext securityContext = SecurityContextHolder.getContext();
+                    securityContext.setAuthentication(usernamePasswordAuthenticationToken);}
+            } else {
+                System.out.println("giá trị token không hợp lệ");
+            }
+
+            filterChain.doFilter(request, response);
+        }
     }
 }
