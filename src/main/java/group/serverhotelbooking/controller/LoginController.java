@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import group.serverhotelbooking.payload.BaseResponse;
 import group.serverhotelbooking.payload.request.LoginRequest;
 import group.serverhotelbooking.payload.request.SignUpRequest;
+import group.serverhotelbooking.payload.response.AuthenticationResponse;
+import group.serverhotelbooking.payload.response.UserResponse;
 import group.serverhotelbooking.service.imp.LoginAuthenServiceImp;
 import group.serverhotelbooking.service.imp.SignupServiceImp;
 import group.serverhotelbooking.util.JwtHelper;
@@ -58,16 +60,21 @@ public class LoginController {
              */
             String token = jwtHelper.generateToken(jsonRoles);
 
+            AuthenticationResponse response = new AuthenticationResponse();
+            UserResponse user = (UserResponse) authentication.getPrincipal();
+            response.setUser(user);
+            response.setToken(token);
+
             BaseResponse baseResponse = new BaseResponse();
 
             if (jsonRoles.contains("ROLE_ADMIN")) {
                 baseResponse.setStatusCode(200);
                 baseResponse.setMessage(String.valueOf(roles.get(0)));
-                baseResponse.setData(token);
+                baseResponse.setData(response);
             } else if (jsonRoles.contains("ROLE_USER")) {
                 baseResponse.setStatusCode(200);
                 baseResponse.setMessage(String.valueOf(roles.get(0)));
-                baseResponse.setData(token);
+                baseResponse.setData(response);
             } else {
                 baseResponse.setStatusCode(403);
                 baseResponse.setMessage("Access Denied");

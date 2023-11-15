@@ -40,7 +40,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf().disable()
+        return httpSecurity.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/modify/**").permitAll()
                 .antMatchers("/reservation/**").permitAll()
                 .antMatchers("/rooms/**").permitAll()
-                .antMatchers("/carts/**").permitAll()
+                .antMatchers("/carts/**").hasAnyRole(Constant.ROLE_ADMIN, Constant.ROLE_USER)
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/roles/**").permitAll()
                 .antMatchers("/file/**").permitAll()
