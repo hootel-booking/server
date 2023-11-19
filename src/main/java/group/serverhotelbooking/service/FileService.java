@@ -24,25 +24,27 @@ public class FileService implements FileServiceImp {
 
     @Override
     public String handleStoreImage(MultipartFile file, String pathFolderStore) throws IOException {
-        String pathFolder = rootFolder + pathFolderStore;
+        if (!file.getOriginalFilename().equals("")) {
+            String pathFolder = rootFolder + pathFolderStore;
 
-        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        String pathImage = pathFolder + File.separator + fileName;
-        Path path = Paths.get(pathFolder);
-        Path pathImageCopy = Paths.get(pathImage);
+            String pathImage = pathFolder + File.separator + fileName;
+            Path path = Paths.get(pathFolder);
+            Path pathImageCopy = Paths.get(pathImage);
 
-        try (InputStream inputStream = file.getInputStream()) {
-            if (!Files.exists(path)) {
-                Files.createDirectory(path);
+            try (InputStream inputStream = file.getInputStream()) {
+                if (!Files.exists(path)) {
+                    Files.createDirectory(path);
+                }
+                Files.copy(inputStream, pathImageCopy, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw e;
             }
-            Files.copy(inputStream, pathImageCopy, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw e;
+
+            return fileName;
         }
-
-
-        return fileName;
+        return null;
     }
 
     @Override
