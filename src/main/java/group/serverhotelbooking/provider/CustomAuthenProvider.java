@@ -45,6 +45,8 @@ public class CustomAuthenProvider implements AuthenticationProvider {
                 user.setId(userEntity.getId());
                 user.setEmail(userEntity.getEmail());
                 user.setRoleName(userEntity.getRoleEntity().getName());
+                user.setAvatar(userEntity.getAvatar());
+                user.setUserName(userEntity.getUserName());
 
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, userEntity.getPassword(), roles);
 

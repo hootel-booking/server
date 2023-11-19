@@ -1,6 +1,7 @@
 package group.serverhotelbooking.service;
 
-import group.serverhotelbooking.entity.BankAccountEntity;
+import group.serverhotelbooking.constant.Constant;
+import group.serverhotelbooking.entity.RoleEntity;
 import group.serverhotelbooking.entity.UserEntity;
 import group.serverhotelbooking.payload.request.SignUpRequest;
 import group.serverhotelbooking.repository.UserRepository;
@@ -28,10 +29,9 @@ public class SignupService implements SignupServiceImp {
         userEntity.setEmail(signUpRequest.getEmail());
         userEntity.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        BankAccountEntity bankAccountEntity = new BankAccountEntity();
-        bankAccountEntity.setAccountNumber("");
-        bankAccountEntity.setAmount(0);
-        userEntity.setBankAccountEntity(bankAccountEntity);
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setId(Constant.ID_ROLE_USER);
+        userEntity.setRoleEntity(roleEntity);
 
         try{
             userRepository.save(userEntity);

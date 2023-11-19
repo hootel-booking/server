@@ -132,18 +132,41 @@ public class UserService implements UserServiceImp {
             userTemp.setPhone(userRequest.getPhone());
             userTemp.setAvatar(filename);
 
-            BankAccountEntity bankAccountEntity = new BankAccountEntity();
-            bankAccountEntity.setAccountNumber(userRequest.getAccountNumber());
+            if (!userRequest.getAccountNumber().equals("")) {
+                BankAccountEntity bankAccount = bankAccountRepository.checkAccountByIdUser(id, userRequest.getAccountNumber());
 
-            if (userRequest.getTransferAmount() >= 0) {
-                bankAccountEntity.setAmount(
-                        userTemp.getBankAccountEntity().getAmount() + userRequest.getTransferAmount()
-                );
-                bankAccountEntity.setTransferDate(common.getCurrentDateTime());
-                userTemp.setBankAccountEntity(bankAccountEntity);
-            } else {
-                System.out.println("Error: số tiền chuyển khoản không hợp lệ");
-                return false;
+                if (userRequest.getTransferAmount() < 0) {
+                    System.out.println("Error: số tiền chuyển khoản không hợp lệ");
+                    return false;
+                }
+
+                BankAccountEntity bankAccountEntity = new BankAccountEntity();
+                bankAccountEntity.setIdUser(id);
+                bankAccountEntity.setAccountNumber(userRequest.getAccountNumber());
+
+                // update
+                if (bankAccount != null && bankAccount.getAccountNumber() != null) {
+                    bankAccountEntity.setAmount(
+                            userTemp.getBankAccountEntity().getAmount() + userRequest.getTransferAmount()
+                    );
+                    bankAccountEntity.setTransferDate(common.getCurrentDateTime());
+                    userTemp.setBankAccountEntity(bankAccountEntity);
+                } else {
+                    // create
+                    if (userRequest.getTransferAmount() > 0) {
+                        bankAccountEntity.setAmount(userRequest.getTransferAmount());
+                        bankAccountEntity.setTransferDate(common.getCurrentDateTime());
+                    } else {
+                        bankAccountEntity.setAmount(0);
+                    }
+                }
+
+                try {
+                    bankAccountRepository.save(bankAccountEntity);
+                } catch (Exception ex) {
+                    System.out.println("Error " + ex);
+                    return false;
+                }
             }
 
             try {

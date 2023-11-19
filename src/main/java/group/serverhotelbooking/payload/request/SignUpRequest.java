@@ -19,8 +19,6 @@ public class SignUpRequest {
 
     private String phone;
 
-    private int id_role;
-
     public String getUsername() {
         return username;
     }
@@ -51,13 +49,5 @@ public class SignUpRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public int getId_role() {
-        return id_role;
-    }
-
-    public void setId_role(int id_role) {
-        this.id_role = id_role;
     }
 }

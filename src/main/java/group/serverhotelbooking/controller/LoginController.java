@@ -93,7 +93,6 @@ public class LoginController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
-
         boolean isSuccess = signupServiceImp.insertUser(signUpRequest);
 
         BaseResponse baseResponse = new BaseResponse();
