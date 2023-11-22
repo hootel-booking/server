@@ -19,6 +19,14 @@ public class BankAccountService implements BankAccountServiceImp {
     private BankAccountRepository bankAccountRepository;
 
     @Override
+    public boolean checkAccountNumber(int idUser, BankAccountRequest bankAccountRequest) {
+        BankAccountEntity bankAccountEntity = bankAccountRepository.checkAccountByIdUser(idUser, bankAccountRequest.getAccountNumber());
+        boolean result = bankAccountEntity != null && bankAccountEntity.getAccountNumber() != null ? true : false;
+
+        return result;
+    }
+
+    @Override
     public int transfer(int idUser, BankAccountRequest bankAccountRequest) {
         Optional<BankAccountEntity> bankAccountEntity = Optional.ofNullable(
                 bankAccountRepository.checkAccountByIdUser(

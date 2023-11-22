@@ -3,6 +3,7 @@ package group.serverhotelbooking.payload.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -10,24 +11,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomRequest {
-    private int id;
     private String name;
-    private double  price;
+    private double price;
     private int discount;
-    private Date createDate;
-    private Date updateDate;
-    private String mainImage;
     private String description;
     private int id_size;
     private int id_type;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private MultipartFile file;
 
     public String getName() {
         return name;
@@ -53,30 +43,6 @@ public class RoomRequest {
         this.discount = discount;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public String getMainImage() {
-        return mainImage;
-    }
-
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -99,5 +65,13 @@ public class RoomRequest {
 
     public void setId_type(int id_type) {
         this.id_type = id_type;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }

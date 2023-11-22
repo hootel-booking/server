@@ -1,7 +1,6 @@
 package group.serverhotelbooking.payload.response;
 
-import group.serverhotelbooking.entity.ImageEntity;
-
+import java.util.Date;
 import java.util.List;
 
 public class RoomResponse {
@@ -13,7 +12,10 @@ public class RoomResponse {
     private String image;
     private String description;
     private int discount;
+    private Date createDate;
     private List<ImageResponse> images;
+    private int idSize;
+    private int idType;
 
     public int getId() {
         return id;
@@ -79,11 +81,35 @@ public class RoomResponse {
         this.discount = discount;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
     public List<ImageResponse> getImages() {
         return images;
     }
 
     public void setImages(List<ImageResponse> images) {
         this.images = images;
+    }
+
+    public int getIdSize() {
+        return idSize;
+    }
+
+    public void setIdSize(int idSize) {
+        this.idSize = idSize;
+    }
+
+    public int getIdType() {
+        return idType;
+    }
+
+    public void setIdType(int idType) {
+        this.idType = idType;
     }
 }

@@ -11,4 +11,5 @@ public final class Constant {
 
     // PATH IMAGES
     public static final String PATH_AVATARS = "\\avatars";
+    public static final String PATH_ROOMS = "\\rooms";
 }

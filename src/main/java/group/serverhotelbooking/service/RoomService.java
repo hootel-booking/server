@@ -10,7 +10,9 @@ import group.serverhotelbooking.payload.response.RoomResponse;
 import group.serverhotelbooking.repository.ImageRepository;
 import group.serverhotelbooking.repository.ModifyRoomRepository;
 import group.serverhotelbooking.repository.RoomRepository;
+import group.serverhotelbooking.service.imp.FileServiceImp;
 import group.serverhotelbooking.service.imp.RoomServiceImp;
+import group.serverhotelbooking.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,13 +20,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class RoomService implements RoomServiceImp {
+    @Autowired
+    private Common common;
+
     @Autowired
     private RoomRepository roomRepository;
 
@@ -33,6 +38,9 @@ public class RoomService implements RoomServiceImp {
 
     @Autowired
     private ModifyRoomRepository modifyRoomRepository;
+
+    @Autowired
+    private FileServiceImp fileServiceImp;
 
     @Override
     public Page<RoomResponse> getAllRoom(int page, int size) {
@@ -76,6 +84,8 @@ public class RoomService implements RoomServiceImp {
             roomResponse.setImage(roomEntity.getMainImage());
             roomResponse.setDescription(roomEntity.getDescription());
             roomResponse.setDiscount(roomEntity.getDiscount());
+            roomResponse.setIdSize(roomEntity.getSize().getId());
+            roomResponse.setIdType(roomEntity.getType().getId());
 
             for (ImageEntity image : imageEntityList) {
                 ImageResponse imageResponse = new ImageResponse();
@@ -91,35 +101,29 @@ public class RoomService implements RoomServiceImp {
     }
 
     @Override
-    public boolean addRoom(RoomRequest roomRequest) {
+    public boolean addRoom(RoomRequest roomRequest, String pathFolderStore) throws IOException {
+        String fileName = fileServiceImp.handleStoreImage(roomRequest.getFile(), pathFolderStore);
+
+        RoomEntity roomEntity = new RoomEntity();
+
+        roomEntity.setName(roomRequest.getName());
+        roomEntity.setDiscount(roomRequest.getDiscount());
+        roomEntity.setPrice(roomRequest.getPrice());
+        roomEntity.setCreateDate(common.getCurrentDateTime());
+        roomEntity.setDescription(roomRequest.getDescription());
+        roomEntity.setMainImage(fileName);
+
+        SizeEntity sizeEntity = new SizeEntity();
+        sizeEntity.setId(roomRequest.getId_size());
+        roomEntity.setSize(sizeEntity);
+
+        TypeEntity typeEntity = new TypeEntity();
+        typeEntity.setId(roomRequest.getId_type());
+        roomEntity.setType(typeEntity);
+
         try {
-            RoomEntity roomEntity = new RoomEntity();
-
-            roomEntity.setName(roomRequest.getName());
-            roomEntity.setDiscount(roomRequest.getDiscount());
-            roomEntity.setPrice(roomRequest.getPrice());
-
-            Date now = new Date();
-
-            // Kiểm tra xem phòng đã tồn tại hay chưa
-            if (roomRequest.getId() != -1) {
-                roomEntity.setUpdateDate(now);
-            } else {
-                roomEntity.setCreateDate(now);
-            }
-
-            roomEntity.setMainImage(roomRequest.getMainImage());
-            roomEntity.setDescription(roomRequest.getDescription());
-
-            SizeEntity sizeEntity = new SizeEntity();
-            sizeEntity.setId(roomRequest.getId_size());
-            roomEntity.setSize(sizeEntity);
-            TypeEntity typeEntity = new TypeEntity();
-            typeEntity.setId(roomRequest.getId_type());
-            roomEntity.setType(typeEntity);
             modifyRoomRepository.save(roomEntity);
             return true;
-
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getLocalizedMessage());
@@ -141,36 +145,38 @@ public class RoomService implements RoomServiceImp {
     }
 
     @Override
-    public boolean updateRoom(RoomRequest roomRequest) {
-        try {
-            Optional<RoomEntity> roomRequestOption = modifyRoomRepository.findById(roomRequest.getId());
-            RoomEntity roomEntity = null;
-            if (roomRequestOption.isPresent()) {
-                roomEntity = roomRequestOption.get();
-                roomEntity.setName(roomRequest.getName());
-                roomEntity.setPrice(roomRequest.getPrice());
-                roomEntity.setDiscount(roomRequest.getDiscount());
-                roomEntity.setMainImage(roomRequest.getMainImage());
-                roomEntity.setDescription(roomRequest.getDescription());
+    public boolean updateRoom(int id, RoomRequest roomRequest, String pathFolderStore) throws IOException {
+        Optional<RoomEntity> roomRequestOption = modifyRoomRepository.findById(id);
 
-                if (roomRequest.getId_size() != 0) {
-                    SizeEntity sizeEntity = new SizeEntity();
-                    sizeEntity.setId(roomRequest.getId_size());
-                    roomEntity.setSize(sizeEntity);
-                }
-                if (roomRequest.getId_type() != 0) {
-                    TypeEntity typeEntity = new TypeEntity();
-                    typeEntity.setId(roomRequest.getId_type());
-                    roomEntity.setType(typeEntity);
-                }
-                modifyRoomRepository.save(roomEntity);
+        if (roomRequestOption.isPresent()) {
+            String filename = fileServiceImp.handleStoreImage(roomRequest.getFile(), pathFolderStore);
+            RoomEntity roomEntity = roomRequestOption.get();
+
+            roomEntity.setName(roomRequest.getName());
+            roomEntity.setPrice(roomRequest.getPrice());
+            roomEntity.setDiscount(roomRequest.getDiscount());
+            roomEntity.setMainImage(filename);
+            roomEntity.setDescription(roomRequest.getDescription());
+            roomEntity.setUpdateDate(common.getCurrentDateTime());
+
+            SizeEntity sizeEntity = new SizeEntity();
+            sizeEntity.setId(roomRequest.getId_size());
+            roomEntity.setSize(sizeEntity);
+
+            TypeEntity typeEntity = new TypeEntity();
+            typeEntity.setId(roomRequest.getId_type());
+            roomEntity.setType(typeEntity);
+
+            try {
+                roomRepository.save(roomEntity);
                 return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
             }
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
+
+        return false;
     }
 
     @Override
@@ -182,9 +188,20 @@ public class RoomService implements RoomServiceImp {
             RoomResponse response = new RoomResponse();
             response.setId(room.getId());
             response.setName(room.getName());
+            response.setPrice(room.getPrice());
+            response.setDiscount(room.getDiscount());
+            response.setCreateDate(room.getCreateDate());
+            response.setNameType(room.getType().getName());
+            response.setSquare(room.getSize().getSquare());
             roomResponses.add(response);
         }
 
         return roomResponses;
+    }
+
+    @Override
+    public boolean findRoomByName(String roomName) {
+        List<RoomEntity> rooms = roomRepository.findByName(roomName);
+        return rooms.size() > 0;
     }
 }
