@@ -6,6 +6,7 @@ public class CartResponse {
     private String nameRoom;
     private double price;
     private int discount;
+    private int idRoom;
 
     public int getId() {
         return id;
@@ -45,5 +46,13 @@ public class CartResponse {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    public int getIdRoom() {
+        return idRoom;
+    }
+
+    public void setIdRoom(int idRoom) {
+        this.idRoom = idRoom;
     }
 }

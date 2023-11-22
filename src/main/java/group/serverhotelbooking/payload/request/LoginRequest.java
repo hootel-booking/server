@@ -1,15 +1,17 @@
 package group.serverhotelbooking.payload.request;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class LoginRequest {
-    //@Pattern(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-    //      + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
+    @NotNull
+    @Pattern(regexp = "^\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b$")
     @NotBlank(message = "email is not null!")
-
     private String email;
 
-    //@Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}")
+    @NotNull
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")
     @NotBlank(message = "password is not null!")
     private String password;
 

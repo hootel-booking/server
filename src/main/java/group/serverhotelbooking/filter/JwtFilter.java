@@ -42,15 +42,21 @@ public class JwtFilter extends OncePerRequestFilter {
             if (headerValue != null && headerValue.startsWith("Bearer ")) {
                 String token = headerValue.substring(7);
                 String data = jwtHelper.parseToken(token);
-                if (data != null && !data.isEmpty()) {
-                    Type listType = new TypeToken<ArrayList<SimpleGrantedAuthority>>() {}.getType();
 
-                    List<SimpleGrantedAuthority> roles = gson.fromJson(data,listType);
+                try{
+                    if (data != null && !data.isEmpty()) {
+                        Type listType = new TypeToken<ArrayList<SimpleGrantedAuthority>>() {}.getType();
 
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                            new UsernamePasswordAuthenticationToken("", "", roles);
-                    SecurityContext securityContext = SecurityContextHolder.getContext();
-                    securityContext.setAuthentication(usernamePasswordAuthenticationToken);}
+                        List<SimpleGrantedAuthority> roles = gson.fromJson(data,listType);
+
+                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                                new UsernamePasswordAuthenticationToken("", "", roles);
+                        SecurityContext securityContext = SecurityContextHolder.getContext();
+                        securityContext.setAuthentication(usernamePasswordAuthenticationToken);
+                    }
+                } catch (Exception ex) {
+                    return;
+                }
             } else {
                 System.out.println("giá trị token không hợp lệ");
             }

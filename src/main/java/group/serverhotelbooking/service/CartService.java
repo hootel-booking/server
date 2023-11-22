@@ -39,6 +39,7 @@ public class CartService implements CartServiceImp {
             cartTemp.setId(cart.getId());
             cartTemp.setPrice(cart.getRoom().getPrice());
             cartTemp.setNameRoom(cart.getRoom().getName());
+            cartTemp.setIdRoom(cart.getRoom().getId());
 
             cartResponses.add(cartTemp);
        }

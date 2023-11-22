@@ -27,7 +27,6 @@ public class CustomAuthenProvider implements AuthenticationProvider {
     @Lazy
     PasswordEncoder passwordEncoder;
 
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();

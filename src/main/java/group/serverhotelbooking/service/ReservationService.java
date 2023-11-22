@@ -32,7 +32,10 @@ public class ReservationService implements ReservationServiceImp {
     private StatusRepository statusRepository;
 
     @Autowired
-    BankAccountRepository bankAccountRepository;
+    private BankAccountRepository bankAccountRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Override
     public boolean insertReservation(ReservationRequest reservationRequest) {
@@ -89,6 +92,12 @@ public class ReservationService implements ReservationServiceImp {
 
             try {
                 reservationRepository.save(reservation);
+
+                // if reservation from cart -> delete cart
+                if (reservationRequest.getIdCart() != 0) {
+                    cartRepository.deleteById(reservationRequest.getIdCart());
+                }
+
                 return true;
             } catch (Exception ex) {
                 System.out.println("Error: " + ex);

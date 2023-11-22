@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -45,10 +47,26 @@ public class RoomController {
     }
 
     @PostMapping("/add")
-    private ResponseEntity<?> addRoom(@RequestBody RoomRequest roomRequest) {
-        boolean addRoomIsSuccess = roomServiceImp.addRoom(roomRequest);
+    private ResponseEntity<?> addRoom(
+        @RequestParam String name, @RequestParam double price, @RequestParam int discount,
+        @RequestParam String description, @RequestParam int idSize, @RequestParam int idType,
+        @RequestParam MultipartFile file
+    ) throws Exception {
+        RoomRequest roomRequest = new RoomRequest();
+        roomRequest.setName(name);
+        roomRequest.setPrice(price);
+        roomRequest.setDiscount(discount);
+        roomRequest.setDescription(description);
+        roomRequest.setId_size(idSize);
+        roomRequest.setId_type(idType);
+        roomRequest.setFile(file);
 
-        BaseResponse baseResponse = new BaseResponse(200, "add room is success", HttpStatus.OK);
+        boolean addRoomIsSuccess = roomServiceImp.addRoom(roomRequest, Constant.PATH_ROOMS);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setStatusCode(200);
+        baseResponse.setMessage("Create New Room");
+        baseResponse.setData(addRoomIsSuccess);
 
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
@@ -62,13 +80,25 @@ public class RoomController {
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateRoom(@RequestBody RoomRequest roomRequest) {
-        boolean updateIsSuccess = roomServiceImp.updateRoom(roomRequest);
+    @PutMapping("/id={id}")
+    public ResponseEntity<?> updateRoom(
+        @PathVariable int id, @RequestParam String name, @RequestParam double price, @RequestParam int discount,
+        @RequestParam String description, @RequestParam int idSize, @RequestParam int idType,
+        @RequestParam MultipartFile file
+    ) throws IOException  {
+        RoomRequest roomRequest = new RoomRequest();
+        roomRequest.setName(name);
+        roomRequest.setPrice(price);
+        roomRequest.setDiscount(discount);
+        roomRequest.setDescription(description);
+        roomRequest.setId_size(idSize);
+        roomRequest.setId_type(idType);
+        roomRequest.setFile(file);
+
+        boolean updateIsSuccess = roomServiceImp.updateRoom(id, roomRequest, Constant.PATH_ROOMS);
 
         BaseResponse baseResponse = new BaseResponse(200, "updated room successfully", updateIsSuccess);
 
-        System.out.println(baseResponse + "jdjdwo");
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 
@@ -80,6 +110,18 @@ public class RoomController {
         baseResponse.setStatusCode(200);
         baseResponse.setMessage("Get List Rooms");
         baseResponse.setData(rooms);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/name={roomName}")
+    private ResponseEntity<?> findRoomByName(@PathVariable String roomName){
+        boolean isSuccess = roomServiceImp.findRoomByName(roomName);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(isSuccess);
+        baseResponse.setMessage("Find Room By Name");
+        baseResponse.setStatusCode(200);
 
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }

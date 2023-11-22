@@ -15,6 +15,21 @@ public class BankAccountController {
     @Autowired
     private BankAccountServiceImp bankAccountServiceImp;
 
+    @PostMapping("/idUser={idUser}")
+    private ResponseEntity<?> checkAccountNumber(
+            @PathVariable int idUser,
+            @RequestBody BankAccountRequest bankAccountRequest
+    ) {
+        boolean result = bankAccountServiceImp.checkAccountNumber(idUser, bankAccountRequest);
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(result);
+        baseResponse.setMessage("Check Account Number");
+        baseResponse.setStatusCode(200);
+
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    }
+
     // nạp tiền
     @PutMapping("/transfer/idUser={idUser}")
     private ResponseEntity<?> transfer(
